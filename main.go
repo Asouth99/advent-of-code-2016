@@ -3,6 +3,7 @@ package main
 import (
 	// Placeholder for ./template.sh to modify
 	// ADD IMPORT HERE
+    "aoc2016/day06"
     "aoc2016/day05"
     "aoc2016/day04"
     "aoc2016/day03"
@@ -22,6 +23,7 @@ type Solver func(int, *log.Logger, ...string) (any, error)
 var solutions = map[int]Solver{
 	// Placeholder for ./template.sh to modify
 	// ADD SOLUTION HERE
+    6: day06.Solve,
     5: day05.Solve,
     4: day04.Solve,
     3: day03.Solve,
