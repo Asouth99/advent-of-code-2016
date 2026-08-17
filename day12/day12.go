@@ -5,6 +5,8 @@ import (
 	"errors"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func Solve(part int, logger *log.Logger, inputFile ...string) (any, error) {
@@ -30,16 +32,56 @@ func SolvePart1(inputFile string, logger *log.Logger) int {
 	}
 	defer f.Close()
 
-	answer := 0
-
+	// Read program
+	programLines := [][]string{}
 	scanner := bufio.NewScanner(f)
 	i := -1
 	for scanner.Scan() {
 		i++
 		line := scanner.Text()
-
-		logger.Printf("%d : %s", i, line)
+		lineSplit := strings.Fields(line)
+		programLines = append(programLines, lineSplit)
 	}
+
+	// Initialise machine state
+	registers := map[string]int{"a": 0, "b": 0, "c": 0, "d": 0}
+	programPtr := 0
+
+	// Loop over program
+	for programPtr < len(programLines) {
+		programLine := programLines[programPtr]
+		op := programLine[0]
+
+		switch op {
+		case "cpy":
+			if _, ok := registers[programLine[1]]; ok {
+				registers[programLine[2]] = registers[programLine[1]]
+			} else {
+				val, _ := strconv.Atoi(programLine[1])
+				registers[programLine[2]] = val
+			}
+		case "inc":
+			registers[programLine[1]]++
+		case "dec":
+			registers[programLine[1]]--
+		case "jnz":
+			val, ok := registers[programLine[1]]
+			if !ok {
+				val, _ = strconv.Atoi(programLine[1])
+			}
+			if val != 0 {
+				jump, _ := strconv.Atoi(programLine[2])
+				programPtr += jump
+				continue
+			}
+		default:
+			logger.Fatalf("Unknown operand found in instruction '%s'", programLine)
+		}
+
+		programPtr++
+	}
+
+	answer := registers["a"]
 	return answer
 }
 
@@ -50,15 +92,55 @@ func SolvePart2(inputFile string, logger *log.Logger) int {
 	}
 	defer f.Close()
 
-	answer := 0
-
+	// Read program
+	programLines := [][]string{}
 	scanner := bufio.NewScanner(f)
 	i := -1
 	for scanner.Scan() {
 		i++
-
-		// line := scanner.Text()
-		// logger.Printf("%d : %s", i, line)
+		line := scanner.Text()
+		lineSplit := strings.Fields(line)
+		programLines = append(programLines, lineSplit)
 	}
+
+	// Initialise machine state
+	registers := map[string]int{"a": 0, "b": 0, "c": 1, "d": 0}
+	programPtr := 0
+
+	// Loop over program
+	for programPtr < len(programLines) {
+		programLine := programLines[programPtr]
+		op := programLine[0]
+
+		switch op {
+		case "cpy":
+			if _, ok := registers[programLine[1]]; ok {
+				registers[programLine[2]] = registers[programLine[1]]
+			} else {
+				val, _ := strconv.Atoi(programLine[1])
+				registers[programLine[2]] = val
+			}
+		case "inc":
+			registers[programLine[1]]++
+		case "dec":
+			registers[programLine[1]]--
+		case "jnz":
+			val, ok := registers[programLine[1]]
+			if !ok {
+				val, _ = strconv.Atoi(programLine[1])
+			}
+			if val != 0 {
+				jump, _ := strconv.Atoi(programLine[2])
+				programPtr += jump
+				continue
+			}
+		default:
+			logger.Fatalf("Unknown operand found in instruction '%s'", programLine)
+		}
+
+		programPtr++
+	}
+
+	answer := registers["a"]
 	return answer
 }
