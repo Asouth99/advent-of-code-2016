@@ -3,16 +3,31 @@ package main
 import (
 	// Placeholder for ./template.sh to modify
 	// ADD IMPORT HERE
-    "aoc2016/day10"
-    "aoc2016/day09"
-    "aoc2016/day08"
-    "aoc2016/day07"
-    "aoc2016/day06"
-    "aoc2016/day05"
-    "aoc2016/day04"
-    "aoc2016/day03"
-    "aoc2016/day02"
+    "aoc2016/day25"
+    "aoc2016/day24"
+    "aoc2016/day23"
+    "aoc2016/day22"
+    "aoc2016/day21"
+    "aoc2016/day20"
+    "aoc2016/day19"
+    "aoc2016/day18"
+    "aoc2016/day17"
+    "aoc2016/day16"
+    "aoc2016/day15"
+    "aoc2016/day14"
 	"aoc2016/day01"
+	"aoc2016/day02"
+	"aoc2016/day03"
+	"aoc2016/day04"
+	"aoc2016/day05"
+	"aoc2016/day06"
+	"aoc2016/day07"
+	"aoc2016/day08"
+	"aoc2016/day09"
+	"aoc2016/day10"
+	"aoc2016/day11"
+	"aoc2016/day12"
+	"aoc2016/day13"
 	"flag"
 	"fmt"
 	"io"
@@ -27,16 +42,31 @@ type Solver func(int, *log.Logger, ...string) (any, error)
 var solutions = map[int]Solver{
 	// Placeholder for ./template.sh to modify
 	// ADD SOLUTION HERE
-    10: day10.Solve,
-    9: day09.Solve,
-    8: day08.Solve,
-    7: day07.Solve,
-    6: day06.Solve,
-    5: day05.Solve,
-    4: day04.Solve,
-    3: day03.Solve,
-    2: day02.Solve,
-	1: day01.Solve,
+    25: day25.Solve,
+    24: day24.Solve,
+    23: day23.Solve,
+    22: day22.Solve,
+    21: day21.Solve,
+    20: day20.Solve,
+    19: day19.Solve,
+    18: day18.Solve,
+    17: day17.Solve,
+    16: day16.Solve,
+    15: day15.Solve,
+    14: day14.Solve,
+	13: day13.Solve,
+	12: day12.Solve,
+	11: day11.Solve,
+	10: day10.Solve,
+	9:  day09.Solve,
+	8:  day08.Solve,
+	7:  day07.Solve,
+	6:  day06.Solve,
+	5:  day05.Solve,
+	4:  day04.Solve,
+	3:  day03.Solve,
+	2:  day02.Solve,
+	1:  day01.Solve,
 }
 
 // Global logger that will be used across the application for verbose messages.
