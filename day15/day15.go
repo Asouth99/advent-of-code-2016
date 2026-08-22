@@ -5,6 +5,8 @@ import (
 	"errors"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func Solve(part int, logger *log.Logger, inputFile ...string) (any, error) {
@@ -23,6 +25,24 @@ func Solve(part int, logger *log.Logger, inputFile ...string) (any, error) {
 	}
 }
 
+type disc struct {
+	id            int
+	positions     int
+	startPosition int
+}
+
+func getCapsule(time int, discs []disc) bool {
+	for i := range discs {
+		disc := discs[i]
+		timeAtDisc := time + i + 1
+		discPos := (disc.startPosition + timeAtDisc) % disc.positions
+		if discPos != 0 {
+			return false
+		}
+	}
+	return true
+}
+
 func SolvePart1(inputFile string, logger *log.Logger) int {
 	f, err := os.Open(inputFile)
 	if err != nil {
@@ -30,16 +50,37 @@ func SolvePart1(inputFile string, logger *log.Logger) int {
 	}
 	defer f.Close()
 
-	answer := 0
-
+	// Read input discs
+	discs := []disc{}
 	scanner := bufio.NewScanner(f)
 	i := -1
 	for scanner.Scan() {
 		i++
 		line := scanner.Text()
+		lineSplit := strings.Fields(line)
 
-		logger.Printf("%d : %s", i, line)
+		id, _ := strconv.Atoi(strings.TrimPrefix(lineSplit[1], "#"))
+		positions, _ := strconv.Atoi(lineSplit[3])
+		startPos, _ := strconv.Atoi(strings.TrimSuffix(lineSplit[11], "."))
+
+		discs = append(discs, disc{id: id, positions: positions, startPosition: startPos})
 	}
+
+	// Print discs
+	for i := range discs {
+		logger.Printf("Disc #%d, Position: %d/%d", discs[i].id, discs[i].startPosition, discs[i].positions)
+	}
+
+	answer := 0
+	time := 0
+	for true {
+		if getCapsule(time, discs) {
+			answer = time
+			break
+		}
+		time++
+	}
+
 	return answer
 }
 
@@ -50,15 +91,38 @@ func SolvePart2(inputFile string, logger *log.Logger) int {
 	}
 	defer f.Close()
 
-	answer := 0
-
+	// Read input discs
+	discs := []disc{}
 	scanner := bufio.NewScanner(f)
 	i := -1
 	for scanner.Scan() {
 		i++
+		line := scanner.Text()
+		lineSplit := strings.Fields(line)
 
-		// line := scanner.Text()
-		// logger.Printf("%d : %s", i, line)
+		id, _ := strconv.Atoi(strings.TrimPrefix(lineSplit[1], "#"))
+		positions, _ := strconv.Atoi(lineSplit[3])
+		startPos, _ := strconv.Atoi(strings.TrimSuffix(lineSplit[11], "."))
+
+		discs = append(discs, disc{id: id, positions: positions, startPosition: startPos})
 	}
+	// Add new disc
+	discs = append(discs, disc{id: len(discs) + 1, positions: 11, startPosition: 0})
+
+	// Print discs
+	for i := range discs {
+		logger.Printf("Disc #%d, Position: %d/%d", discs[i].id, discs[i].startPosition, discs[i].positions)
+	}
+
+	answer := 0
+	time := 0
+	for true {
+		if getCapsule(time, discs) {
+			answer = time
+			break
+		}
+		time++
+	}
+
 	return answer
 }

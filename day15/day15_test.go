@@ -22,7 +22,7 @@ var tests = []testCase{
 	{
 		name:          "Example 1",
 		inputFilePath: "example_1.txt",
-		expectedP1:    1,
+		expectedP1:    5,
 		expectedP2:    0,
 	},
 }
