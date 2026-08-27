@@ -22,8 +22,20 @@ var tests = []testCase{
 	{
 		name:          "Example 1",
 		inputFilePath: "example_1.txt",
-		expectedP1:    1,
-		expectedP2:    0,
+		expectedP1:    "DDRRRD",
+		expectedP2:    370,
+	},
+	{
+		name:          "Example 2",
+		inputFilePath: "example_2.txt",
+		expectedP1:    "DDUDRLRRUDRD",
+		expectedP2:    492,
+	},
+	{
+		name:          "Example 3",
+		inputFilePath: "example_3.txt",
+		expectedP1:    "DRURDRUDDLLDLUURRDULRLDUUDDDRR",
+		expectedP2:    830,
 	},
 }
 
