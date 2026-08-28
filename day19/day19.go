@@ -1,10 +1,12 @@
 package day19
 
 import (
-	"bufio"
 	"errors"
+	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func Solve(part int, logger *log.Logger, inputFile ...string) (any, error) {
@@ -23,42 +25,71 @@ func Solve(part int, logger *log.Logger, inputFile ...string) (any, error) {
 	}
 }
 
+type elf struct {
+	id     int
+	target *elf
+}
+
+func printCircle(head *elf) {
+	str := fmt.Sprintf("%d -> ", head.id)
+	current := head.target
+	for current != head {
+		str += fmt.Sprintf("%d -> ", current.id)
+		current = current.target
+	}
+
+	fmt.Print(str, head.id, "\n")
+}
+
 func SolvePart1(inputFile string, logger *log.Logger) int {
-	f, err := os.Open(inputFile)
+	f, err := os.ReadFile(inputFile)
 	if err != nil {
-		logger.Fatalf("error opening file: %v\n", err)
+		logger.Fatalf("error reading file: %v\n", err)
 	}
-	defer f.Close()
-
-	answer := 0
-
-	scanner := bufio.NewScanner(f)
-	i := -1
-	for scanner.Scan() {
-		i++
-		line := scanner.Text()
-
-		logger.Printf("%d : %s", i, line)
+	numElfs, err := strconv.Atoi(string(f))
+	if err != nil {
+		logger.Fatal(err)
 	}
+
+	logger.Printf("Finding which elf gets all the presents in a circle of %d", numElfs)
+
+	// Initialise circular linked list
+	head := &elf{id: 1}
+	current := head
+	for i := 2; i <= numElfs; i++ {
+		next := &elf{id: i}
+		current.target = next
+		current = next
+	}
+	current.target = head
+
+	if strings.HasPrefix(inputFile, "example") {
+		printCircle(head)
+	}
+
+	// Keep looping until an elf points to itself
+	current = head
+	for current != current.target {
+		current.target = current.target.target
+		current = current.target
+	}
+
+	answer := current.id
 	return answer
 }
 
 func SolvePart2(inputFile string, logger *log.Logger) int {
-	f, err := os.Open(inputFile)
+	f, err := os.ReadFile(inputFile)
 	if err != nil {
-		logger.Fatalf("error opening file: %v\n", err)
+		logger.Fatalf("error reading file: %v\n", err)
 	}
-	defer f.Close()
+	numElfs, err := strconv.Atoi(string(f))
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	logger.Printf("Finding which elf gets all the presents in a circle of %d", numElfs)
 
 	answer := 0
-
-	scanner := bufio.NewScanner(f)
-	i := -1
-	for scanner.Scan() {
-		i++
-
-		// line := scanner.Text()
-		// logger.Printf("%d : %s", i, line)
-	}
 	return answer
 }
