@@ -22,8 +22,14 @@ var tests = []testCase{
 	{
 		name:          "Example 1",
 		inputFilePath: "example_1.txt",
-		expectedP1:    1,
+		expectedP1:    "decab",
 		expectedP2:    0,
+	},
+	{
+		name:          "Example 2",
+		inputFilePath: "example_2.txt",
+		expectedP1:    0,
+		expectedP2:    "abcde",
 	},
 }
 
@@ -56,7 +62,7 @@ func TestSolvePartOne(t *testing.T) {
 				return
 			}
 			if p1 != tc.expectedP1 {
-				t.Errorf("Part 1 failed. Expected: %d, Got: %d", tc.expectedP1, p1)
+				t.Errorf("Part 1 failed. Expected: %v, Got: %v", tc.expectedP1, p1)
 			}
 		})
 	}
