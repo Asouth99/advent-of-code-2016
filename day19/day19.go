@@ -78,6 +78,23 @@ func SolvePart1(inputFile string, logger *log.Logger) int {
 	return answer
 }
 
+type elf2 struct {
+	id   int
+	next *elf2
+	prev *elf2
+}
+
+func printCircle2(head *elf2) {
+	str := fmt.Sprintf("%d -> ", head.id)
+	current := head.next
+	for current != head {
+		str += fmt.Sprintf("%d -> ", current.id)
+		current = current.next
+	}
+
+	fmt.Print(str, head.id, "\n")
+}
+
 func SolvePart2(inputFile string, logger *log.Logger) int {
 	f, err := os.ReadFile(inputFile)
 	if err != nil {
@@ -90,6 +107,52 @@ func SolvePart2(inputFile string, logger *log.Logger) int {
 
 	logger.Printf("Finding which elf gets all the presents in a circle of %d", numElfs)
 
-	answer := 0
+	// Initialise circular linked list
+	head := &elf2{id: 1}
+	current := head
+	var prev *elf2 = nil
+	for i := 2; i <= numElfs; i++ {
+		next := &elf2{id: i}
+		current.next = next
+		current.prev = prev
+		prev = current
+		current = next
+	}
+	head.prev = current
+	current.next = head
+	current.prev = prev
+
+	if strings.HasPrefix(inputFile, "example") {
+		printCircle2(head)
+	}
+
+	// Get the elf in the middle
+	opposite := head
+	for range numElfs / 2 {
+		opposite = opposite.next
+	}
+	logger.Printf("Elf in the middle has id %d", opposite.id)
+
+	// Keep looping until an elf points to itself
+	lenCircle := numElfs
+	current = head
+	for current != current.next {
+		// Remove opposite elf
+		opposite.prev.next = opposite.next
+		opposite.next.prev = opposite.prev
+
+		// Update current elf
+		current = current.next
+
+		// Move opposite elf
+		opposite = opposite.next
+		if lenCircle%2 == 1 {
+			opposite = opposite.next
+		}
+
+		lenCircle--
+	}
+
+	answer := current.id
 	return answer
 }
